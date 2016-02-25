@@ -6,6 +6,7 @@ p = 4294967311
 import binascii
 from random import randint
 from nltk.corpus import stopwords
+import numpy as np
 stop = stopwords.words('english')
 
 for index in range(len(stop)):
@@ -87,6 +88,7 @@ row = len(universal_shingle_list)
 col = len(artical_list)
 
 
+'''
 def min_hash(n):
     hash_functions = []
     for i in range(n):
@@ -114,6 +116,30 @@ def min_hash(n):
                 for row_id in range(n):
                     s_matrix[row_id][c] = min(s_matrix[row_id][c], hash_values[row_id])
     return s_matrix
+'''
+
+
+def min_hash(n):
+    hash_functions = []
+    for i in range(n):
+        c1 = randint(1, p-1)
+        c2 = randint(1, p-1)
+        hash_functions.append([c1, c2])
+
+    # build signature matrix with n * col
+    s_matrix = [[p] * col for i in range(n)]
+
+    for c in range(col):
+        # print artical_list[c]
+        # shingle_array = list(dict[artical_list[c]])
+        shingle_array = np.array(list(dict[artical_list[c]]))
+        for i in range(n):
+            c1 = hash_functions[i][0]
+            c2 = hash_functions[i][1]
+            hash_values = (c1 * shingle_array + c2) % p
+            s_matrix[i][c] = min(hash_values)
+
+    return s_matrix
 
 
 def find_similar(s_matrix):
@@ -140,7 +166,7 @@ def phase2():
     s_matrix = min_hash(10)
     find_similar(s_matrix)
 
-#phase2()
+phase2()
 
 
 # ######################## phase 3 LSH ################################################################
@@ -196,16 +222,16 @@ def plot_figure(t):
 
     print "fp values are ", fp_list
 
-    # fp_list = []
-    # for r in [1, 3, 5, 7, 9]:
-    #     b = 10
-    #     fp = 0
-    #     for i in range(iteration):
-    #         fp += calculate_fp(b, r, t)
-    #     fp = float(fp) / iteration
-    #     fp_list.append(fp)
-    #
-    # print "fp values are ", fp_list
+    fp_list = []
+    for r in [1, 3, 5, 7, 9]:
+        b = 10
+        fp = 0
+        for i in range(iteration):
+            fp += calculate_fp(b, r, t)
+        fp = float(fp) / iteration
+        fp_list.append(fp)
+
+    print "fp values are ", fp_list
 
 plot_figure(0.8)
 
