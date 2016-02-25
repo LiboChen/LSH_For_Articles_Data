@@ -7,6 +7,7 @@ import binascii
 from random import randint
 from nltk.corpus import stopwords
 import numpy as np
+import matplotlib.pyplot as plt
 stop = stopwords.words('english')
 
 for index in range(len(stop)):
@@ -86,37 +87,6 @@ print "the total number of unique shingles is", len(universal_shingle_set)
 universal_shingle_list = list(universal_shingle_set)
 row = len(universal_shingle_list)
 col = len(artical_list)
-
-
-'''
-def min_hash(n):
-    hash_functions = []
-    for i in range(n):
-        c1 = randint(1, p-1)
-        c2 = randint(1, p-1)
-        hash_functions.append([c1, c2])
-
-    # print len(artical_list)
-    # print hash_functions
-
-    # build signature matrix with n * col
-    s_matrix = [[p] * col for i in range(n)]
-
-    for r in range(row):
-        hash_values = []
-        # calculate each hash values
-        for i in range(n):
-            c1 = hash_functions[i][0]
-            c2 = hash_functions[i][1]
-            hash_value = (c1 * r + c2) % p
-            hash_values.append(hash_value)
-
-        for c in range(col):
-            if exist(r, c, universal_shingle_list, dict, artical_list):
-                for row_id in range(n):
-                    s_matrix[row_id][c] = min(s_matrix[row_id][c], hash_values[row_id])
-    return s_matrix
-'''
 
 
 def min_hash(n):
@@ -212,6 +182,7 @@ def calculate_fp(b, r, t):
 def plot_figure(t):
     iteration = 10
     fp_list = []
+    b_list = [1, 3, 5, 7, 9]
     for b in [1, 3, 5, 7, 9]:
         r = 2
         fp = 0
@@ -221,8 +192,12 @@ def plot_figure(t):
         fp_list.append(fp)
 
     print "fp values are ", fp_list
+    fig, ax = plt.subplots()
+    ax.scatter(b_list, fp_list)
+    plt.show()
 
     fp_list = []
+    r_list = [1, 3, 5, 7, 9]
     for r in [1, 3, 5, 7, 9]:
         b = 10
         fp = 0
@@ -232,6 +207,9 @@ def plot_figure(t):
         fp_list.append(fp)
 
     print "fp values are ", fp_list
+    fig, ax = plt.subplots()
+    ax.scatter(r_list, fp_list)
+    plt.show()
 
 plot_figure(0.8)
 
